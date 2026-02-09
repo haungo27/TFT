@@ -1,0 +1,198 @@
+menu "TFT App"
+
+config TFT_SPI_MOSI
+    int "TFT SPI MOSI GPIO"
+    default 11
+
+config TFT_SPI_SCLK
+    int "TFT SPI SCLK GPIO"
+    default 12
+
+config TFT_SPI_CS
+    int "TFT SPI CS GPIO"
+    default 10
+
+config TFT_SPI_DC
+    int "TFT SPI DC GPIO"
+    default 14
+
+config TFT_SPI_RST
+    int "TFT SPI RST GPIO"
+    default 15
+
+config TFT_SPI_CLOCK_HZ
+    int "TFT SPI clock (Hz)"
+    default 80000000
+
+config TFT_SPI_MODE
+    int "TFT SPI mode (0 or 3)"
+    default 0
+
+config TFT_COLOR_ORDER_BGR
+    bool "Use BGR color order"
+    default n
+
+config TFT_INVERT_COLOR
+    bool "Invert panel colors"
+    default n
+
+config TFT_TEST_PATTERN
+    bool "Draw test pattern at boot"
+    default y
+
+config TFT_I2C_SDA
+    int "I2C SDA GPIO"
+    default 4
+
+config TFT_I2C_SCL
+    int "I2C SCL GPIO"
+    default 17
+
+config TFT_I2C_FREQ_HZ
+    int "I2C frequency (Hz)"
+    default 400000
+
+config TFT_MCP23017_ADDR
+    int "MCP23017 I2C address"
+    default 32
+
+config TFT_MCP23017_RST
+    int "MCP23017 reset GPIO (-1 disable)"
+    default 18
+
+config TFT_ENCODER_PIN_A
+    int "Encoder A (MCP23017 GPA pin)"
+    default 3
+
+config TFT_ENCODER_PIN_B
+    int "Encoder B (MCP23017 GPA pin)"
+    default 2
+
+config TFT_ENCODER_PIN_SW
+    int "Encoder SW (MCP23017 GPA pin)"
+    default 1
+
+config TFT_ENABLE_TOUCH
+    bool "Enable XPT2046 touch"
+    default y
+
+config TFT_SPI_MISO
+    int "TFT SPI MISO GPIO"
+    default 13 if TFT_ENABLE_TOUCH
+    default -1 if !TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_CS
+    int "Touch CS GPIO"
+    default 16
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_SPI_CLOCK_HZ
+    int "Touch SPI clock (Hz)"
+    default 2000000
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_SPI_MOSI
+    int "Touch SPI MOSI GPIO"
+    default 6
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_SPI_MISO
+    int "Touch SPI MISO GPIO"
+    default 5
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_SPI_SCLK
+    int "Touch SPI SCLK GPIO"
+    default 7
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_X_MIN
+    int "Touch raw X min"
+    default 200
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_X_MAX
+    int "Touch raw X max"
+    default 3800
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_Y_MIN
+    int "Touch raw Y min"
+    default 200
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_Y_MAX
+    int "Touch raw Y max"
+    default 3800
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_SWAP_XY
+    bool "Touch swap X/Y"
+    default n
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_MIRROR_X
+    bool "Touch mirror X"
+    default n
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_MIRROR_Y
+    bool "Touch mirror Y"
+    default n
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_TOUCH_Z_THRESHOLD
+    int "Touch pressure threshold"
+    default 50
+    depends on TFT_ENABLE_TOUCH
+
+config TFT_OTA_FROM_SDMMC
+    bool "Enable SDMMC OTA"
+    default y
+
+config TFT_SDMMC_MOUNT_POINT
+    string "SD card mount point"
+    default "/sdcard"
+    depends on TFT_OTA_FROM_SDMMC
+
+config TFT_SDMMC_CLK_PIN
+    int "SDMMC CLK GPIO"
+    default 39
+    depends on TFT_OTA_FROM_SDMMC
+
+config TFT_SDMMC_CMD_PIN
+    int "SDMMC CMD GPIO"
+    default 38
+    depends on TFT_OTA_FROM_SDMMC
+
+config TFT_SDMMC_D0_PIN
+    int "SDMMC D0 GPIO"
+    default 40
+    depends on TFT_OTA_FROM_SDMMC
+
+config TFT_OTA_BIN_PATH
+    string "OTA firmware path"
+    default "/sdcard/firmware.bin"
+    depends on TFT_OTA_FROM_SDMMC
+
+config TFT_OTA_ON_BOOT
+    bool "Run OTA at boot"
+    default n
+    depends on TFT_OTA_FROM_SDMMC
+
+config TFT_OTA_TOUCH_TRIGGER
+    bool "Trigger OTA by touch hold in top-left"
+    default y
+    depends on TFT_OTA_FROM_SDMMC && TFT_ENABLE_TOUCH
+
+config TFT_OTA_TOUCH_HOLD_MS
+    int "Touch hold time (ms)"
+    default 1500
+    depends on TFT_OTA_TOUCH_TRIGGER
+
+config TFT_OTA_TOUCH_ZONE_PX
+    int "Touch trigger zone size (px)"
+    default 40
+    depends on TFT_OTA_TOUCH_TRIGGER
+
+endmenu

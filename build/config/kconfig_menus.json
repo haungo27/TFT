@@ -36000,6 +36000,336 @@
                 "type": "menu"
             },
             {
+                "children": [
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_SPI_MOSI",
+                        "name": "TFT_SPI_MOSI",
+                        "range": null,
+                        "title": "TFT SPI MOSI GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_SPI_SCLK",
+                        "name": "TFT_SPI_SCLK",
+                        "range": null,
+                        "title": "TFT SPI SCLK GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_SPI_CS",
+                        "name": "TFT_SPI_CS",
+                        "range": null,
+                        "title": "TFT SPI CS GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_SPI_DC",
+                        "name": "TFT_SPI_DC",
+                        "range": null,
+                        "title": "TFT SPI DC GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_SPI_RST",
+                        "name": "TFT_SPI_RST",
+                        "range": null,
+                        "title": "TFT SPI RST GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_SPI_CLOCK_HZ",
+                        "name": "TFT_SPI_CLOCK_HZ",
+                        "range": null,
+                        "title": "TFT SPI clock (Hz)",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_SPI_MODE",
+                        "name": "TFT_SPI_MODE",
+                        "range": null,
+                        "title": "TFT SPI mode (0 or 3)",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_COLOR_ORDER_BGR",
+                        "name": "TFT_COLOR_ORDER_BGR",
+                        "range": null,
+                        "title": "Use BGR color order",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_INVERT_COLOR",
+                        "name": "TFT_INVERT_COLOR",
+                        "range": null,
+                        "title": "Invert panel colors",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_TEST_PATTERN",
+                        "name": "TFT_TEST_PATTERN",
+                        "range": null,
+                        "title": "Draw test pattern at boot",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_I2C_SDA",
+                        "name": "TFT_I2C_SDA",
+                        "range": null,
+                        "title": "I2C SDA GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_I2C_SCL",
+                        "name": "TFT_I2C_SCL",
+                        "range": null,
+                        "title": "I2C SCL GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_I2C_FREQ_HZ",
+                        "name": "TFT_I2C_FREQ_HZ",
+                        "range": null,
+                        "title": "I2C frequency (Hz)",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_MCP23017_ADDR",
+                        "name": "TFT_MCP23017_ADDR",
+                        "range": null,
+                        "title": "MCP23017 I2C address",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_MCP23017_RST",
+                        "name": "TFT_MCP23017_RST",
+                        "range": null,
+                        "title": "MCP23017 reset GPIO (-1 disable)",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_ENCODER_PIN_A",
+                        "name": "TFT_ENCODER_PIN_A",
+                        "range": null,
+                        "title": "Encoder A (MCP23017 GPA pin)",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_ENCODER_PIN_B",
+                        "name": "TFT_ENCODER_PIN_B",
+                        "range": null,
+                        "title": "Encoder B (MCP23017 GPA pin)",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_ENCODER_PIN_SW",
+                        "name": "TFT_ENCODER_PIN_SW",
+                        "range": null,
+                        "title": "Encoder SW (MCP23017 GPA pin)",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_ENABLE_TOUCH",
+                        "name": "TFT_ENABLE_TOUCH",
+                        "range": null,
+                        "title": "Enable XPT2046 touch",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_SPI_MISO",
+                        "name": "TFT_SPI_MISO",
+                        "range": null,
+                        "title": "TFT SPI MISO GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_CS",
+                        "name": "TFT_TOUCH_CS",
+                        "range": null,
+                        "title": "Touch CS GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_SPI_CLOCK_HZ",
+                        "name": "TFT_TOUCH_SPI_CLOCK_HZ",
+                        "range": null,
+                        "title": "Touch SPI clock (Hz)",
+                        "type": "int"
+                    },
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "depends_on": "TFT_OTA_FROM_SDMMC",
+                                "help": null,
+                                "id": "TFT_SDMMC_MOUNT_POINT",
+                                "name": "TFT_SDMMC_MOUNT_POINT",
+                                "range": null,
+                                "title": "SD card mount point",
+                                "type": "string"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "TFT_OTA_FROM_SDMMC",
+                                "help": null,
+                                "id": "TFT_SDMMC_CLK_PIN",
+                                "name": "TFT_SDMMC_CLK_PIN",
+                                "range": null,
+                                "title": "SDMMC CLK GPIO",
+                                "type": "int"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "TFT_OTA_FROM_SDMMC",
+                                "help": null,
+                                "id": "TFT_SDMMC_CMD_PIN",
+                                "name": "TFT_SDMMC_CMD_PIN",
+                                "range": null,
+                                "title": "SDMMC CMD GPIO",
+                                "type": "int"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "TFT_OTA_FROM_SDMMC",
+                                "help": null,
+                                "id": "TFT_SDMMC_D0_PIN",
+                                "name": "TFT_SDMMC_D0_PIN",
+                                "range": null,
+                                "title": "SDMMC D0 GPIO",
+                                "type": "int"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "TFT_OTA_FROM_SDMMC",
+                                "help": null,
+                                "id": "TFT_OTA_BIN_PATH",
+                                "name": "TFT_OTA_BIN_PATH",
+                                "range": null,
+                                "title": "OTA firmware path",
+                                "type": "string"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "TFT_OTA_FROM_SDMMC",
+                                "help": null,
+                                "id": "TFT_OTA_ON_BOOT",
+                                "name": "TFT_OTA_ON_BOOT",
+                                "range": null,
+                                "title": "Run OTA at boot",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "depends_on": "TFT_OTA_TOUCH_TRIGGER",
+                                        "help": null,
+                                        "id": "TFT_OTA_TOUCH_HOLD_MS",
+                                        "name": "TFT_OTA_TOUCH_HOLD_MS",
+                                        "range": null,
+                                        "title": "Touch hold time (ms)",
+                                        "type": "int"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "TFT_OTA_TOUCH_TRIGGER",
+                                        "help": null,
+                                        "id": "TFT_OTA_TOUCH_ZONE_PX",
+                                        "name": "TFT_OTA_TOUCH_ZONE_PX",
+                                        "range": null,
+                                        "title": "Touch trigger zone size (px)",
+                                        "type": "int"
+                                    }
+                                ],
+                                "depends_on": "TFT_OTA_FROM_SDMMC && TFT_ENABLE_TOUCH",
+                                "help": null,
+                                "id": "TFT_OTA_TOUCH_TRIGGER",
+                                "name": "TFT_OTA_TOUCH_TRIGGER",
+                                "range": null,
+                                "title": "Trigger OTA by touch hold in top-left",
+                                "type": "bool"
+                            }
+                        ],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "TFT_OTA_FROM_SDMMC",
+                        "name": "TFT_OTA_FROM_SDMMC",
+                        "range": null,
+                        "title": "Enable SDMMC OTA",
+                        "type": "bool"
+                    }
+                ],
+                "depends_on": null,
+                "id": "component-config-tft-app-workspaces-TFT-main-Kconfig-1",
+                "title": "TFT App",
+                "type": "menu"
+            },
+            {
                 "children": [],
                 "depends_on": "\"${IDF_BUILD_V2}\"",
                 "id": "component-config-configuration-for-components-not-included-in-the-build-opt-esp-idf-Kconfig-765",

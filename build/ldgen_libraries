@@ -206,3 +206,4 @@
 /workspaces/TFT/build/esp-idf/spiffs/libspiffs.a
 /workspaces/TFT/build/esp-idf/main/libmain.a
 /workspaces/TFT/build/esp-idf/esp_lcd/libesp_lcd.a
+/workspaces/TFT/build/esp-idf/fatfs/libfatfs.a
