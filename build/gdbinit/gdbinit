@@ -1,0 +1,2 @@
+source /workspaces/TFT/build/gdbinit/symbols
+source /workspaces/TFT/build/gdbinit/connect

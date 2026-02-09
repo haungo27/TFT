@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/workspaces/TFT/build/CMakeFiles/bootloader
+/workspaces/TFT/build/CMakeFiles/bootloader.rule
+/workspaces/TFT/build/CMakeFiles/bootloader-complete.rule
+/workspaces/TFT/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/workspaces/TFT/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/workspaces/TFT/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/workspaces/TFT/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/workspaces/TFT/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/workspaces/TFT/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/workspaces/TFT/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
