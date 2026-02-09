@@ -170,6 +170,11 @@ config TFT_SDMMC_D0_PIN
     default 40
     depends on TFT_OTA_FROM_SDMMC
 
+config TFT_SDMMC_FREQ_KHZ
+    int "SDMMC clock (kHz)"
+    default 20000
+    depends on TFT_OTA_FROM_SDMMC
+
 config TFT_OTA_BIN_PATH
     string "OTA firmware path"
     default "/sdcard/firmware.bin"

@@ -36222,6 +36222,116 @@
                         "type": "int"
                     },
                     {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_SPI_MOSI",
+                        "name": "TFT_TOUCH_SPI_MOSI",
+                        "range": null,
+                        "title": "Touch SPI MOSI GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_SPI_MISO",
+                        "name": "TFT_TOUCH_SPI_MISO",
+                        "range": null,
+                        "title": "Touch SPI MISO GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_SPI_SCLK",
+                        "name": "TFT_TOUCH_SPI_SCLK",
+                        "range": null,
+                        "title": "Touch SPI SCLK GPIO",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_X_MIN",
+                        "name": "TFT_TOUCH_X_MIN",
+                        "range": null,
+                        "title": "Touch raw X min",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_X_MAX",
+                        "name": "TFT_TOUCH_X_MAX",
+                        "range": null,
+                        "title": "Touch raw X max",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_Y_MIN",
+                        "name": "TFT_TOUCH_Y_MIN",
+                        "range": null,
+                        "title": "Touch raw Y min",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_Y_MAX",
+                        "name": "TFT_TOUCH_Y_MAX",
+                        "range": null,
+                        "title": "Touch raw Y max",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_SWAP_XY",
+                        "name": "TFT_TOUCH_SWAP_XY",
+                        "range": null,
+                        "title": "Touch swap X/Y",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_MIRROR_X",
+                        "name": "TFT_TOUCH_MIRROR_X",
+                        "range": null,
+                        "title": "Touch mirror X",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_MIRROR_Y",
+                        "name": "TFT_TOUCH_MIRROR_Y",
+                        "range": null,
+                        "title": "Touch mirror Y",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "TFT_ENABLE_TOUCH",
+                        "help": null,
+                        "id": "TFT_TOUCH_Z_THRESHOLD",
+                        "name": "TFT_TOUCH_Z_THRESHOLD",
+                        "range": null,
+                        "title": "Touch pressure threshold",
+                        "type": "int"
+                    },
+                    {
                         "children": [
                             {
                                 "children": [],
@@ -36261,6 +36371,16 @@
                                 "name": "TFT_SDMMC_D0_PIN",
                                 "range": null,
                                 "title": "SDMMC D0 GPIO",
+                                "type": "int"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "TFT_OTA_FROM_SDMMC",
+                                "help": null,
+                                "id": "TFT_SDMMC_FREQ_KHZ",
+                                "name": "TFT_SDMMC_FREQ_KHZ",
+                                "range": null,
+                                "title": "SDMMC clock (kHz)",
                                 "type": "int"
                             },
                             {

@@ -63,6 +63,9 @@
 #ifndef CONFIG_TFT_OTA_BIN_PATH
 #define CONFIG_TFT_OTA_BIN_PATH "/sdcard/firmware.bin"
 #endif
+#ifndef CONFIG_TFT_SDMMC_FREQ_KHZ
+#define CONFIG_TFT_SDMMC_FREQ_KHZ 20000
+#endif
 #ifndef CONFIG_TFT_TOUCH_SPI_MOSI
 #define CONFIG_TFT_TOUCH_SPI_MOSI 6
 #endif
@@ -113,6 +116,7 @@ static const char *TAG = "TFT_FULL_S3";
 #define TFT_SDMMC_CLK_PIN CONFIG_TFT_SDMMC_CLK_PIN
 #define TFT_SDMMC_CMD_PIN CONFIG_TFT_SDMMC_CMD_PIN
 #define TFT_SDMMC_D0_PIN  CONFIG_TFT_SDMMC_D0_PIN
+#define TFT_SDMMC_FREQ_KHZ CONFIG_TFT_SDMMC_FREQ_KHZ
 #define TFT_SPI_MODE CONFIG_TFT_SPI_MODE
 #define TFT_TOUCH_SPI_MOSI CONFIG_TFT_TOUCH_SPI_MOSI
 #define TFT_TOUCH_SPI_MISO CONFIG_TFT_TOUCH_SPI_MISO
@@ -642,6 +646,7 @@ static bool encoder_poll(int *delta, bool *pressed) {
 static esp_err_t mount_sdcard(sdmmc_card_t **out_card) {
     sdmmc_host_t host = SDMMC_HOST_DEFAULT();
     host.flags = SDMMC_HOST_FLAG_1BIT;
+    host.max_freq_khz = TFT_SDMMC_FREQ_KHZ;
 
     sdmmc_slot_config_t slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
     slot_config.width = 1;
@@ -658,6 +663,8 @@ static esp_err_t mount_sdcard(sdmmc_card_t **out_card) {
         .max_files = 3,
         .allocation_unit_size = 16 * 1024,
     };
+
+    ESP_LOGI(TAG, "SDMMC cfg: clk=%d cmd=%d d0=%d freq=%d kHz", TFT_SDMMC_CLK_PIN, TFT_SDMMC_CMD_PIN, TFT_SDMMC_D0_PIN, TFT_SDMMC_FREQ_KHZ);
 
     sdmmc_card_t *card = NULL;
     esp_err_t err = esp_vfs_fat_sdmmc_mount(CONFIG_TFT_SDMMC_MOUNT_POINT, &host, &slot_config, &mount_config, &card);
@@ -798,11 +805,14 @@ void app_main(void) {
     uint32_t last_touch_ms = 0;
     uint16_t last_tx = 0;
     uint16_t last_ty = 0;
+    bool touch_seen = false;
 #endif
 #if CONFIG_TFT_OTA_FROM_SDMMC && !TFT_TOUCH_ENABLED
     sd_file_list_t encoder_list = {0};
     bool encoder_ready = false;
     bool encoder_ui_list = false;
+    int encoder_last_delta = 0;
+    bool encoder_last_pressed = false;
 #endif
 
     while (1) {
@@ -811,11 +821,10 @@ void app_main(void) {
     uint16_t x = 0;
     uint16_t y = 0;
     bool pressed = touch_get_xy(&x, &y);
-    bool touch_ok = pressed;
-
     if (pressed) {
         last_tx = x;
         last_ty = y;
+            touch_seen = true;
     }
 
         if (redraw) {
@@ -824,7 +833,7 @@ void app_main(void) {
             } else {
                 draw_sd_idle(panel_handle);
             }
-            draw_status_bar(panel_handle, true, sd_ok, touch_ok, last_tx, last_ty);
+            draw_status_bar(panel_handle, true, sd_ok, touch_seen, last_tx, last_ty);
             redraw = false;
         }
 
@@ -840,18 +849,16 @@ void app_main(void) {
             int ty = y;
 
             if (!ui_list) {
-                if (tx >= 40 && tx <= 200 && ty >= 80 && ty <= 120) {
-                    ESP_LOGI(TAG, "Scanning SD card");
-                    if (scan_sdcard(&file_list) == ESP_OK && file_list.count > 0) {
-                        file_list.selected = 0;
-                        ui_list = true;
-                        sd_ok = true;
-                    } else {
-                        ESP_LOGW(TAG, "No .bin files found on SD card");
-                        sd_ok = false;
-                    }
-                    redraw = true;
+                ESP_LOGI(TAG, "Scanning SD card");
+                if (scan_sdcard(&file_list) == ESP_OK && file_list.count > 0) {
+                    file_list.selected = 0;
+                    ui_list = true;
+                    sd_ok = true;
+                } else {
+                    ESP_LOGW(TAG, "No .bin files found on SD card");
+                    sd_ok = false;
                 }
+                redraw = true;
             } else {
                 if (ty >= LCD_V_RES - 30 && ty <= LCD_V_RES - 8 && tx >= 8 && tx <= 88) {
                     ui_list = false;
@@ -910,6 +917,8 @@ void app_main(void) {
         int delta = 0;
         bool pressed = false;
         if (encoder_poll(&delta, &pressed)) {
+            encoder_last_delta = delta;
+            encoder_last_pressed = pressed;
             if (delta != 0 && encoder_ui_list && encoder_list.count > 0) {
                 int next = encoder_list.selected + delta;
                 if (next < 0) {
@@ -948,7 +957,7 @@ void app_main(void) {
             } else {
                 draw_sd_idle(panel_handle);
             }
-            draw_status_bar(panel_handle, encoder_ready, sd_ok, false, 0, 0);
+            draw_status_bar(panel_handle, encoder_ready, sd_ok, false, (uint16_t)encoder_last_delta, (uint16_t)(encoder_last_pressed ? 1 : 0));
             redraw = false;
         }
 #endif
@@ -962,6 +971,6 @@ void app_main(void) {
         }
 #endif
 
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
