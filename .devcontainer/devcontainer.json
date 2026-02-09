@@ -1,0 +1,14 @@
+{
+    "name": "ESP-IDF",
+    "image": "espressif/idf:latest",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "espressif.esp-idf-extension"
+            ]
+        }
+    },
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    }
+}
