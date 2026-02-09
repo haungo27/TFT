@@ -61,15 +61,15 @@ config TFT_MCP23017_RST
     default 18
 
 config TFT_ENCODER_PIN_A
-    int "Encoder A (MCP23017 GPA pin)"
+    int "Encoder A (MCP23017 pin 0-15)"
     default 3
 
 config TFT_ENCODER_PIN_B
-    int "Encoder B (MCP23017 GPA pin)"
+    int "Encoder B (MCP23017 pin 0-15)"
     default 2
 
 config TFT_ENCODER_PIN_SW
-    int "Encoder SW (MCP23017 GPA pin)"
+    int "Encoder SW (MCP23017 pin 0-15)"
     default 1
 
 config TFT_ENABLE_TOUCH

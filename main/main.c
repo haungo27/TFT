@@ -408,6 +408,10 @@ static esp_err_t mcp23017_read_gpioa(uint8_t *gpioa) {
     return mcp23017_read_reg(MCP23017_GPIOA, gpioa);
 }
 
+static esp_err_t mcp23017_read_gpiob(uint8_t *gpiob) {
+    return mcp23017_read_reg(MCP23017_GPIOB, gpiob);
+}
+
 static void to_upper(char *dst, const char *src, size_t max_len) {
     size_t i = 0;
     for (; i + 1 < max_len && src[i] != '\0'; ++i) {
@@ -541,17 +545,53 @@ static void draw_button(esp_lcd_panel_handle_t panel_handle, int x, int y, int w
     draw_text(panel_handle, text_x, text_y, label, fg, bg);
 }
 
+static int cpu_usage_percent(void) {
+#if (configUSE_TRACE_FACILITY == 1) && (configGENERATE_RUN_TIME_STATS == 1) && (INCLUDE_xTaskGetSystemState == 1)
+    UBaseType_t task_count = uxTaskGetNumberOfTasks();
+    TaskStatus_t *tasks = (TaskStatus_t *)pvPortMalloc(task_count * sizeof(TaskStatus_t));
+    if (!tasks) {
+        return -1;
+    }
+    uint32_t total_time = 0;
+    UBaseType_t count = uxTaskGetSystemState(tasks, task_count, &total_time);
+    uint32_t idle_time = 0;
+    for (UBaseType_t i = 0; i < count; ++i) {
+        if (strncmp(tasks[i].pcTaskName, "IDLE", 4) == 0) {
+            idle_time += tasks[i].ulRunTimeCounter;
+        }
+    }
+    vPortFree(tasks);
+    if (total_time == 0) {
+        return -1;
+    }
+    int idle_pct = (int)((idle_time * 100U) / total_time);
+    int used_pct = 100 - idle_pct;
+    if (used_pct < 0) used_pct = 0;
+    if (used_pct > 100) used_pct = 100;
+    return used_pct;
+#else
+    return -1;
+#endif
+}
+
 static void draw_status_bar(esp_lcd_panel_handle_t panel_handle, bool mcp_ok, bool sd_ok, bool touch_ok, uint16_t tx, uint16_t ty) {
     uint16_t bg = rgb565(8, 8, 12);
     uint16_t fg = rgb565(220, 220, 220);
     char line[64];
+    int cpu = cpu_usage_percent();
+    uint32_t free_heap = esp_get_free_heap_size() / 1024;
+    uint32_t min_heap = heap_caps_get_minimum_free_size(MALLOC_CAP_DEFAULT) / 1024;
 
     draw_rect(panel_handle, 0, 0, LCD_H_RES, 16, bg);
-    snprintf(line, sizeof(line), "MCP:%s SD:%s T:%s", mcp_ok ? "OK" : "--", sd_ok ? "OK" : "--", touch_ok ? "OK" : "--");
+    if (cpu >= 0) {
+        snprintf(line, sizeof(line), "MCP:%s SD:%s T:%s CPU:%d%%", mcp_ok ? "OK" : "--", sd_ok ? "OK" : "--", touch_ok ? "OK" : "--", cpu);
+    } else {
+        snprintf(line, sizeof(line), "MCP:%s SD:%s T:%s CPU:--", mcp_ok ? "OK" : "--", sd_ok ? "OK" : "--", touch_ok ? "OK" : "--");
+    }
     draw_text(panel_handle, 4, 4, line, fg, bg);
 
     draw_rect(panel_handle, 0, 16, LCD_H_RES, 16, bg);
-    snprintf(line, sizeof(line), "X:%u Y:%u", (unsigned)tx, (unsigned)ty);
+    snprintf(line, sizeof(line), "RAM:%luk/%luk X:%u Y:%u", (unsigned long)free_heap, (unsigned long)min_heap, (unsigned)tx, (unsigned)ty);
     draw_text(panel_handle, 4, 20, line, fg, bg);
 }
 
@@ -594,8 +634,10 @@ static esp_err_t scan_sdcard(sd_file_list_t *list) {
     return ESP_OK;
 }
 
-static void draw_sd_list(esp_lcd_panel_handle_t panel_handle, const sd_file_list_t *list) {
-    fill_color(panel_handle, rgb565(0, 0, 0));
+static void draw_sd_list(esp_lcd_panel_handle_t panel_handle, const sd_file_list_t *list, bool full_clear) {
+    if (full_clear) {
+        fill_color(panel_handle, rgb565(0, 0, 0));
+    }
     draw_text(panel_handle, 8, 6, "SELECT OTA FILE", rgb565(255, 255, 255), rgb565(0, 0, 0));
     int y = 24;
     for (int i = 0; i < list->count; ++i) {
@@ -606,8 +648,10 @@ static void draw_sd_list(esp_lcd_panel_handle_t panel_handle, const sd_file_list
     draw_button(panel_handle, 8, LCD_V_RES - 30, 80, 22, "BACK", false);
 }
 
-static void draw_sd_idle(esp_lcd_panel_handle_t panel_handle) {
-    fill_color(panel_handle, rgb565(0, 0, 0));
+static void draw_sd_idle(esp_lcd_panel_handle_t panel_handle, bool full_clear) {
+    if (full_clear) {
+        fill_color(panel_handle, rgb565(0, 0, 0));
+    }
     draw_text(panel_handle, 8, 6, "SD OTA", rgb565(255, 255, 255), rgb565(0, 0, 0));
     draw_text(panel_handle, 8, 18, "TAP TO SCAN", rgb565(180, 180, 180), rgb565(0, 0, 0));
     draw_button(panel_handle, 40, 80, 160, 40, "LOAD SD CARD", false);
@@ -622,13 +666,22 @@ static int encoder_delta(uint8_t curr_ab, uint8_t *last_ab) {
 
 static bool encoder_poll(int *delta, bool *pressed) {
     uint8_t gpioa = 0;
+    uint8_t gpiob = 0;
     if (mcp23017_read_gpioa(&gpioa) != ESP_OK) {
         return false;
     }
+    if (mcp23017_read_gpiob(&gpiob) != ESP_OK) {
+        return false;
+    }
 
-    uint8_t a = (gpioa >> TFT_ENCODER_PIN_A) & 0x01;
-    uint8_t b = (gpioa >> TFT_ENCODER_PIN_B) & 0x01;
-    uint8_t sw = (gpioa >> TFT_ENCODER_PIN_SW) & 0x01;
+    uint16_t gpio = (uint16_t)gpioa | ((uint16_t)gpiob << 8);
+    if (TFT_ENCODER_PIN_A > 15 || TFT_ENCODER_PIN_B > 15 || TFT_ENCODER_PIN_SW > 15) {
+        return false;
+    }
+
+    uint8_t a = (gpio >> TFT_ENCODER_PIN_A) & 0x01;
+    uint8_t b = (gpio >> TFT_ENCODER_PIN_B) & 0x01;
+    uint8_t sw = (gpio >> TFT_ENCODER_PIN_SW) & 0x01;
 
     static uint8_t last_ab = 0;
     static uint8_t last_sw = 1;
@@ -638,7 +691,7 @@ static bool encoder_poll(int *delta, bool *pressed) {
     last_sw = sw;
 
     if (*delta != 0 || *pressed) {
-        ESP_LOGI(TAG, "ENC gpioa=0x%02X a=%u b=%u sw=%u delta=%d pressed=%d", gpioa, a, b, sw, *delta, *pressed);
+        ESP_LOGI(TAG, "ENC gpio=0x%04X a=%u b=%u sw=%u delta=%d pressed=%d", gpio, a, b, sw, *delta, *pressed);
     }
     return true;
 }
@@ -806,6 +859,7 @@ void app_main(void) {
     uint16_t last_tx = 0;
     uint16_t last_ty = 0;
     bool touch_seen = false;
+    bool ui_full_clear = true;
 #endif
 #if CONFIG_TFT_OTA_FROM_SDMMC && !TFT_TOUCH_ENABLED
     sd_file_list_t encoder_list = {0};
@@ -813,6 +867,7 @@ void app_main(void) {
     bool encoder_ui_list = false;
     int encoder_last_delta = 0;
     bool encoder_last_pressed = false;
+    bool ui_full_clear = true;
 #endif
 
     while (1) {
@@ -829,12 +884,13 @@ void app_main(void) {
 
         if (redraw) {
             if (ui_list) {
-                draw_sd_list(panel_handle, &file_list);
+                draw_sd_list(panel_handle, &file_list, ui_full_clear);
             } else {
-                draw_sd_idle(panel_handle);
+                draw_sd_idle(panel_handle, ui_full_clear);
             }
             draw_status_bar(panel_handle, true, sd_ok, touch_seen, last_tx, last_ty);
             redraw = false;
+            ui_full_clear = false;
         }
 
         if (pressed) {
@@ -854,6 +910,7 @@ void app_main(void) {
                     file_list.selected = 0;
                     ui_list = true;
                     sd_ok = true;
+                        ui_full_clear = true;
                 } else {
                     ESP_LOGW(TAG, "No .bin files found on SD card");
                     sd_ok = false;
@@ -862,6 +919,7 @@ void app_main(void) {
             } else {
                 if (ty >= LCD_V_RES - 30 && ty <= LCD_V_RES - 8 && tx >= 8 && tx <= 88) {
                     ui_list = false;
+                    ui_full_clear = true;
                     redraw = true;
                 } else {
                     int index = (ty - 24) / 28;
@@ -937,6 +995,7 @@ void app_main(void) {
                         encoder_list.selected = 0;
                         encoder_ui_list = true;
                         sd_ok = true;
+                        ui_full_clear = true;
                     } else {
                         ESP_LOGW(TAG, "No .bin files found on SD card");
                         sd_ok = false;
@@ -953,12 +1012,13 @@ void app_main(void) {
 
         if (redraw) {
             if (encoder_ui_list) {
-                draw_sd_list(panel_handle, &encoder_list);
+                draw_sd_list(panel_handle, &encoder_list, ui_full_clear);
             } else {
-                draw_sd_idle(panel_handle);
+                draw_sd_idle(panel_handle, ui_full_clear);
             }
             draw_status_bar(panel_handle, encoder_ready, sd_ok, false, (uint16_t)encoder_last_delta, (uint16_t)(encoder_last_pressed ? 1 : 0));
             redraw = false;
+            ui_full_clear = false;
         }
 #endif
 

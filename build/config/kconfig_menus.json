@@ -36158,7 +36158,7 @@
                         "id": "TFT_ENCODER_PIN_A",
                         "name": "TFT_ENCODER_PIN_A",
                         "range": null,
-                        "title": "Encoder A (MCP23017 GPA pin)",
+                        "title": "Encoder A (MCP23017 pin 0-15)",
                         "type": "int"
                     },
                     {
@@ -36168,7 +36168,7 @@
                         "id": "TFT_ENCODER_PIN_B",
                         "name": "TFT_ENCODER_PIN_B",
                         "range": null,
-                        "title": "Encoder B (MCP23017 GPA pin)",
+                        "title": "Encoder B (MCP23017 pin 0-15)",
                         "type": "int"
                     },
                     {
@@ -36178,7 +36178,7 @@
                         "id": "TFT_ENCODER_PIN_SW",
                         "name": "TFT_ENCODER_PIN_SW",
                         "range": null,
-                        "title": "Encoder SW (MCP23017 GPA pin)",
+                        "title": "Encoder SW (MCP23017 pin 0-15)",
                         "type": "int"
                     },
                     {
