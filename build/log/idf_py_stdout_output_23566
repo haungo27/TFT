@@ -1,0 +1,9 @@
+Command: cmake -G Ninja -B /workspaces/TFT/build -DPYTHON_DEPS_CHECKED=1 -DPYTHON=/opt/esp/python_env/idf6.1_py3.12_env/bin/python -DESP_PLATFORM=1 -DCCACHE_ENABLE=True /workspaces/TFT
+-- Component directory /opt/esp/idf/components/idf_test does not contain a CMakeLists.txt file. No component will be added
+-- Component directory /opt/esp/idf/components/mqtt does not contain a CMakeLists.txt file. No component will be added
+-- Minimal build - OFF
+-- ccache will be used for faster recompilation
+-- Building ESP-IDF components for target esp32s3
+NOTICE: Dependencies lock doesn't exist, solving dependencies.
+.HINT: Please check manifest file of the following component(s): main
+-- Configuring incomplete, errors occurred!

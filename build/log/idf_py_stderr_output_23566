@@ -1,0 +1,17 @@
+Command: cmake -G Ninja -B /workspaces/TFT/build -DPYTHON_DEPS_CHECKED=1 -DPYTHON=/opt/esp/python_env/idf6.1_py3.12_env/bin/python -DESP_PLATFORM=1 -DCCACHE_ENABLE=True /workspaces/TFT
+CMake Error at /opt/esp/idf/tools/cmake/build.cmake:695 (message):
+  WARNING: Component "espressif/esp_lcd_touch_xpt2046" not found
+
+  ERROR: Version solving failed:
+
+      - no versions of espressif/esp_lcd_touch_xpt2046 match ^1.0.4
+      - project depends on espressif/esp_lcd_touch_xpt2046 (^1.0.4)
+
+  Result: Because project depends on espressif/esp_lcd_touch_xpt2046 (^1.0.4)
+  which doesn't match any versions, version solving failed.
+
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/project.cmake:742 (idf_build_process)
+  CMakeLists.txt:4 (project)
+
+
