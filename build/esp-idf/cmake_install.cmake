@@ -719,6 +719,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("/workspaces/TFT/build/esp-idf/lvgl__lvgl/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("/workspaces/TFT/build/esp-idf/main/cmake_install.cmake")
 endif()
 

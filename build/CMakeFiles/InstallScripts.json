@@ -71,6 +71,8 @@
 		"/workspaces/TFT/build/esp-idf/esp_timer/cmake_install.cmake",
 		"/workspaces/TFT/build/esp-idf/esp_ringbuf/cmake_install.cmake",
 		"/workspaces/TFT/build/esp-idf/esp_psram/cmake_install.cmake",
+		"/workspaces/TFT/build/esp-idf/esp_psram/device/cmake_install.cmake",
+		"/workspaces/TFT/build/esp-idf/esp_psram/xip_impl/cmake_install.cmake",
 		"/workspaces/TFT/build/esp-idf/esp_driver_uart/cmake_install.cmake",
 		"/workspaces/TFT/build/esp-idf/esp_driver_gptimer/cmake_install.cmake",
 		"/workspaces/TFT/build/esp-idf/app_trace/cmake_install.cmake",
@@ -158,6 +160,7 @@
 		"/workspaces/TFT/build/esp-idf/rt/cmake_install.cmake",
 		"/workspaces/TFT/build/esp-idf/spiffs/cmake_install.cmake",
 		"/workspaces/TFT/build/esp-idf/ulp/cmake_install.cmake",
+		"/workspaces/TFT/build/esp-idf/lvgl__lvgl/cmake_install.cmake",
 		"/workspaces/TFT/build/esp-idf/main/cmake_install.cmake"
 	],
 	"Parallel" : false
