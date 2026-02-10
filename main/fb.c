@@ -3,6 +3,8 @@
 #include <string.h>
 #include "esp_heap_caps.h"
 #include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 #include "tft_config.h"
 
 static const char *TAG = "TFT_FB";
@@ -13,6 +15,20 @@ static uint16_t *fb_dma = NULL;
 static bool fb_enabled = false;
 static volatile bool fb_force_full_refresh = false;
 static fb_render_mode_t fb_render_mode = FB_RENDER_FB;
+static esp_lcd_panel_io_handle_t fb_io_handle = NULL;
+static SemaphoreHandle_t fb_tx_sem = NULL;
+static bool fb_tx_cb_installed = false;
+
+static bool fb_on_color_trans_done(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io_event_data_t *edata, void *user_ctx) {
+    (void)panel_io;
+    (void)edata;
+    (void)user_ctx;
+    BaseType_t high_task_wakeup = pdFALSE;
+    if (fb_tx_sem != NULL) {
+        xSemaphoreGiveFromISR(fb_tx_sem, &high_task_wakeup);
+    }
+    return high_task_wakeup == pdTRUE;
+}
 
 static void fb_fill_rect(uint16_t *fb, int x0, int y0, int w, int h, uint16_t color) {
     if (w <= 0 || h <= 0) {
@@ -95,6 +111,27 @@ fb_render_mode_t fb_get_render_mode(void) {
     return fb_render_mode;
 }
 
+void fb_set_io_handle(esp_lcd_panel_io_handle_t io_handle) {
+    fb_io_handle = io_handle;
+    if (fb_io_handle == NULL || fb_tx_cb_installed) {
+        return;
+    }
+    if (fb_tx_sem == NULL) {
+        fb_tx_sem = xSemaphoreCreateBinary();
+    }
+    if (fb_tx_sem == NULL) {
+        ESP_LOGW(TAG, "FB tx semaphore alloc failed");
+        return;
+    }
+
+    esp_lcd_panel_io_callbacks_t cbs = {
+        .on_color_trans_done = fb_on_color_trans_done,
+    };
+    if (esp_lcd_panel_io_register_event_callbacks(fb_io_handle, &cbs, NULL) == ESP_OK) {
+        fb_tx_cb_installed = true;
+    }
+}
+
 void fb_request_full_refresh(void) {
     fb_force_full_refresh = true;
 }
@@ -139,6 +176,9 @@ void fb_present(esp_lcd_panel_handle_t panel_handle) {
         }
         memcpy(fb_dma, fb_draw + y * LCD_H_RES, (size_t)LCD_H_RES * h * sizeof(uint16_t));
         esp_lcd_panel_draw_bitmap(panel_handle, 0, y, LCD_H_RES, y + h, fb_dma);
+        if (fb_tx_sem != NULL && fb_tx_cb_installed) {
+            xSemaphoreTake(fb_tx_sem, portMAX_DELAY);
+        }
     }
     uint16_t *tmp = fb_show;
     fb_show = fb_draw;

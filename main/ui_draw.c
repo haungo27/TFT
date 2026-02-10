@@ -43,6 +43,9 @@ static bool temp_sensor_read(float *out_celsius) {
 
 static int lvgl_fps_avg(void) {
 #if TFT_HAS_LVGL && defined(LV_USE_PERF_MONITOR) && LV_USE_PERF_MONITOR
+    if (lv_disp_get_default() == NULL) {
+        return -1;
+    }
     return (int)lv_refr_get_fps_avg();
 #else
     return -1;
@@ -51,6 +54,9 @@ static int lvgl_fps_avg(void) {
 
 static int lvgl_cpu_usage_percent(void) {
 #if TFT_HAS_LVGL && defined(LV_USE_PERF_MONITOR) && LV_USE_PERF_MONITOR
+    if (lv_disp_get_default() == NULL) {
+        return -1;
+    }
     uint32_t idle = lv_timer_get_idle();
     if (idle > 100) {
         idle = 100;

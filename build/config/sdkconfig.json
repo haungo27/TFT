@@ -1619,7 +1619,7 @@
     "TFT_SPI_SCLK": 12,
     "TFT_TEST_PATTERN": true,
     "TFT_TOUCH_CS": 16,
-    "TFT_TOUCH_MIRROR_X": false,
+    "TFT_TOUCH_MIRROR_X": true,
     "TFT_TOUCH_MIRROR_Y": false,
     "TFT_TOUCH_SPI_CLOCK_HZ": 2000000,
     "TFT_TOUCH_SPI_MISO": 5,

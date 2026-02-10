@@ -73,6 +73,7 @@ static void ui_task(void *arg) {
     esp_lcd_panel_disp_on_off(panel_handle, true);
 
     fb_init();
+    fb_set_io_handle(io_handle);
     ui_draw_init();
 
     fb_render_mode_t render_mode = FB_RENDER_DIRECT;
